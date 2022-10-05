@@ -16,42 +16,43 @@ eq=[];
 
 for v = 1:length(y)
     x(v) = y(v)/delta;
-    disp(x(v))
-    switch x(v)
-        case x(v)>=-0.75 && x(v)<-0.65
-            del2 = -7;
-        case x(v)>=-0.65 && x(v)<-0.55
-            del2 = -6;
-        case x(v)>=-0.55 && x(v)<-0.45
-            del2 = -5;
-        case x(v)>=-0.45 && x(v)<-0.35
-            del2 = -4;
-        case x(v)>=-0.35 && x(v)<-0.25
-            del2 = -3;
-        case x(v)>=-0.25 && x(v)<-0.15
-            del2 = -2;
-        case x(v)>=-0.15 && x(v)<-0.05
-            del2 = -1;
-        case x(v)>=-0.05 && x(v)<0.05
-            del2 = 0;
-        case x(v)>=0.05 && x(v)<0.15
-            del2 = 1;
-        case x(v)>=0.15 && x(v)<0.25
-            del2 = 2;
-        case x(v)>=0.25 && x(v)<0.35
-            del2 = s3;
-        case x(v)>=0.35 && x(v)<0.45
-            del2 = 4;
-        case x(v)>=0.45 && x(v)<0.55
-            del2 = 5;
-        case x(v)>=0.55 && x(v)<0.65
-            del2 = 6;
-        case x(v)>=0.65 && x(v)<0.75
-            del2 = 7;
+
+    if x(v)>=-7.5 && x(v)<-6.5
+        del2 = -7;
+    elseif x(v)>=-6.5 && x(v)<-5.5
+        del2 = -6;
+    elseif x(v)>=-5.5 && x(v)<-4.5
+        del2 = -5;
+    elseif x(v)>=-4.5 && x(v)<-3.5
+        del2 = -4;
+    elseif x(v)>=-3.5 && x(v)<-2.5
+        del2 = -3;
+    elseif x(v)>=-2.5 && x(v)<-1.5
+        del2 = -2;
+    elseif x(v)>=-1.5 && x(v)<-0.5
+        del2 = -1;
+    elseif x(v)>=-0.5 && x(v)<0.5
+        del2 = 0;
+    elseif x(v)>=0.5 && x(v)<1.5
+        del2 = 1;
+    elseif x(v)>=1.5 && x(v)<2.5
+        del2 = 2;
+    elseif x(v)>=2.5 && x(v)<3.5
+        del2 = 3;
+    elseif x(v)>=3.5 && x(v)<4.5
+        del2 = 4;
+    elseif x(v)>=4.5 && x(v)<5.5
+        del2 = 5;
+    elseif x(v)>=5.5 && x(v)<6.5
+        del2 = 6;
+    elseif x(v)>=6.5 && x(v)<7.5
+        del2 = 7;
     end
     xq(v) = del2*delta;
-    disp(xq(v))
     eq(v) = xq(v)-x(v);
+    fprintf('xq = %f\n',xq(v))
+    fprintf('x = %f \n',x(v))
+    fprintf('eq = %f\n',eq(v))
 end
 
 SNRn = 0;
