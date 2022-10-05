@@ -1,0 +1,69 @@
+% ALONZO & SOLIS | CEDISP2 S11 | PROBLEM 1
+% Script that simulates the operation of a 4-bit linear midtread 
+% quantizer on a given speech signal
+
+% obtain value
+[y, Fs] = audioread("gutom.wav");
+ymax = round(max(y));
+ymin = round(min(y));
+
+% step size
+delta = (ymax-ymin)/(2^4-1);
+
+x=[];
+eq=[];
+
+for v = 0:length(y)
+    x(v) = v/delta;
+    switch x
+        case x>=-7.5 || x<-6.5
+            del2 = -7;
+        case x>=-6.5 || x<-5.5
+            del2 = -6;
+        case x>=-5.5 || x<-4.5
+            del2 = -5;
+        case x>=-4.5 || x<-3.5
+            del2 = -4;
+        case x>=-3.5 || x<-2.5
+            del2 = -3;
+        case x>=-2.5 || x<-1.5
+            del2 = -2;
+        case x>=-1.5 || x<-0.5
+            del2 = -1;
+        case x>=-0.5 || x<0.5
+            del2 = 0;
+        case x>=0.5 || x<1.5
+            del2 = 1;
+        case x>=1.5 || x<2.5
+            del2 = 2;
+        case x>=2.5 || x<3.5
+            del2 = 3;
+        case x>=3.5 || x<4.5
+            del2 = 4;
+        case x>=4.5 || x<5.5
+            del2 = 5;
+        case x>=5.5 || x<6.5
+            del2 = 6;
+        case x>=6.5 || x<7.5
+            del2 = 7;
+    end
+    xq = del2*delta;
+    eq(v) = xq-x(v);
+end
+
+SNRn = 0;
+SNRd = 0;
+
+for n = 0:length(y)-1
+    SNRn = SNRn + x(n)^2;
+end
+
+for n = 0:length(y)-1
+    SNRd = SNRd + (xq(n) - x(n))^2;
+end
+
+SNR = SNRn/SNRd;
+
+SNRdb = 10*log(SNR);
+
+%plot(x,y)
