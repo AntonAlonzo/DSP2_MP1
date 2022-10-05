@@ -68,16 +68,16 @@ SNRn = 0;
 SNRd = 0;
 
 for n = 1:length(orig)-1
-    SNRn = SNRn + y(n)^2;
-% end
-% 
-% for n = 1:length(orig)-1
-%     SNRd = SNRd + (xq(n) - y(n))^2;
-% end
-% 
-% SNR = SNRn/SNRd;
-% 
-% SNRdb = 10*log(SNR);
+    SNRn = SNRn + orig(n)^2;
+end
+
+for n = 1:length(orig)-1
+    SNRd = SNRd + (xq(n) - orig(n))^2;
+end
+
+SNR = SNRn/SNRd;
+
+SNRdb = 10*log(SNR);
 
 %plot anf print
 subplot(5,1,1);
@@ -100,7 +100,7 @@ subplot(5,1,5);
 title("Quantized Error");
 plot(1:length(orig),eq)
 
-%fprintf("SNR dB: %f\n", SNRdb)
+fprintf("SNR dB: %f\n", SNRdb)
 
 audiowrite("G3_mp1_2.wav", xq, Fs)
 
