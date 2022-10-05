@@ -28,6 +28,8 @@ eq=[];
 for v = 1:length(y)
     x(v) = y(v)/delta;
 
+    disp(x(v))
+
     if x(v)>=-7.5 && x(v)<-6.5
         del2 = -7;
     elseif x(v)>=-6.5 && x(v)<-5.5
@@ -56,27 +58,28 @@ for v = 1:length(y)
         del2 = 5;
     elseif x(v)>=5.5 && x(v)<6.5
         del2 = 6;
-    elseif x(v)>=6.5 && x(v)<7.5
+    elseif x(v)>=6.5 && x(v)<=7.5
         del2 = 7;
     end
+
     yq(v) = del2*delta;
     eq(v) = yq(v)-y(v);
 end
 
-SNRn = 0;
-SNRd = 0;
-
-for n = 1:length(orig)-1
-    SNRn = SNRn + y(n)^2;
-end
-
-for n = 1:length(orig)-1
-    SNRd = SNRd + (xq(n) - y(n))^2;
-end
-
-SNR = SNRn/SNRd;
-
-SNRdb = 10*log(SNR);
+% SNRn = 0;
+% SNRd = 0;
+% 
+% for n = 1:length(orig)-1
+%     SNRn = SNRn + y(n)^2;
+% end
+% 
+% for n = 1:length(orig)-1
+%     SNRd = SNRd + (xq(n) - y(n))^2;
+% end
+% 
+% SNR = SNRn/SNRd;
+% 
+% SNRdb = 10*log(SNR);
 
 
 xq = [];
@@ -112,6 +115,6 @@ subplot(5,1,5);
 title("Quantized Error");
 plot(1:length(orig),eq)
 
-fprintf("SNR dB: %f\n", SNRdb)
+%fprintf("SNR dB: %f\n", SNRdb)
 
-audiowrite("G3_mp1_1.wav", xq, Fs)
+audiowrite("G3_mp1_2.wav", xq, Fs)
