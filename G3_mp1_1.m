@@ -49,10 +49,7 @@ for v = 1:length(y)
         del2 = 7;
     end
     xq(v) = del2*delta;
-    eq(v) = xq(v)-x(v);
-    fprintf('xq = %f\n',xq(v))
-    fprintf('x = %f \n',x(v))
-    fprintf('eq = %f\n',eq(v))
+    eq(v) = xq(v)-y(v);
 end
 
 SNRn = 0;
@@ -72,10 +69,17 @@ SNRdb = 10*log(SNR);
 
 %plot anf print
 subplot(3,1,1);
+title("Original Speech");
 plot(1:length(y),y)
 
 subplot(3,1,2);
+title("Quantized Speech");
 plot(1:length(y),xq)
 
 subplot(3,1,3);
+title("Quantized Error");
 plot(1:length(y),eq)
+
+fprintf("SNR dB: %f\n", SNRdb)
+
+audiowrite("G3_mp1_1.wav", xq, Fs)
