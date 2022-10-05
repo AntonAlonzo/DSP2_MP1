@@ -3,9 +3,9 @@
 % quantizer on a given speech signal
 
 % obtain value
-[y, Fs] = audioread("gutom.wav");
-ymax = round(max(y));
-ymin = round(min(y));
+[orig, Fs] = audioread("gutom.wav");
+ymax = round(max(orig));
+ymin = round(min(orig));
 
 % step size
 delta = (ymax-ymin)/(2^4-1);
@@ -14,8 +14,8 @@ x=[];
 xq=[];
 eq=[];
 
-for v = 1:length(y)
-    x(v) = y(v)/delta;
+for v = 1:length(orig)
+    x(v) = orig(v)/delta;
 
     if x(v)>=-7.5 && x(v)<-6.5
         del2 = -7;
@@ -49,17 +49,17 @@ for v = 1:length(y)
         del2 = 7;
     end
     xq(v) = del2*delta;
-    eq(v) = xq(v)-y(v);
+    eq(v) = xq(v)-orig(v);
 end
 
 SNRn = 0;
 SNRd = 0;
 
-for n = 1:length(y)-1
+for n = 1:length(orig)-1
     SNRn = SNRn + x(n)^2;
 end
 
-for n = 1:length(y)-1
+for n = 1:length(orig)-1
     SNRd = SNRd + (xq(n) - x(n))^2;
 end
 
@@ -70,15 +70,15 @@ SNRdb = 10*log(SNR);
 %plot anf print
 subplot(3,1,1);
 title("Original Speech");
-plot(1:length(y),y)
+plot(1:length(orig),orig)
 
 subplot(3,1,2);
 title("Quantized Speech");
-plot(1:length(y),xq)
+plot(1:length(orig),xq)
 
 subplot(3,1,3);
 title("Quantized Error");
-plot(1:length(y),eq)
+plot(1:length(orig),eq)
 
 fprintf("SNR dB: %f\n", SNRdb)
 
