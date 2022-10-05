@@ -65,7 +65,7 @@ end
 
 SNR = SNRn/SNRd;
 
-SNRdb = 10*log(SNR);
+SNRdb = 10*log10(SNR);
 
 %plot anf print
 subplot(3,1,1);
