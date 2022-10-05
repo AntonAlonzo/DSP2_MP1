@@ -9,13 +9,8 @@ ogmin = round(min(orig));
 y = [];
 
 for n = 1:length(orig)
-    if orig(n)>=0
-        sign = 1;
-    else
-        sign = -1;
-    end
-
-    y(n) = sign * log(1 + 255*abs(orig(n))/abs(max(orig(n)))) / log(1+255);
+    num = log(1 + 255*abs(orig(n))/abs(max(orig)));
+    y(n) = SIGN(orig(n)) * num/log(1+255);
 end
 
 % step size
@@ -23,13 +18,9 @@ delta = (ogmax-ogmin)/(2^4-1);
 
 x=[];
 yq=[];
-eq=[];
 
 for v = 1:length(y)
     x(v) = y(v)/delta;
-
-    disp(x(v))
-
     if x(v)>=-7.5 && x(v)<-6.5
         del2 = -7;
     elseif x(v)>=-6.5 && x(v)<-5.5
@@ -58,41 +49,35 @@ for v = 1:length(y)
         del2 = 5;
     elseif x(v)>=5.5 && x(v)<6.5
         del2 = 6;
-    elseif x(v)>=6.5 && x(v)<=7.5
+    elseif x(v)>=6.5 && x(v)<7.5
         del2 = 7;
     end
 
     yq(v) = del2*delta;
-    eq(v) = yq(v)-y(v);
 end
-
-% SNRn = 0;
-% SNRd = 0;
-% 
-% for n = 1:length(orig)-1
-%     SNRn = SNRn + y(n)^2;
-% end
-% 
-% for n = 1:length(orig)-1
-%     SNRd = SNRd + (xq(n) - y(n))^2;
-% end
-% 
-% SNR = SNRn/SNRd;
-% 
-% SNRdb = 10*log(SNR);
-
 
 xq = [];
+eq=[];
 
 for n = 1:length(yq)
-    if yq(n)>=0
-        sign = 1;
-    else
-        sign = -1;
-    end
-
-    xq(n)=abs(max(orig(n)))*sign*((1+255)^abs(yq(n))-1)/255;
+    xq(n) = abs(max(orig))*SIGN(yq(n))*((1+255)^abs(yq(n))-1)/255;
+    eq(n) = xq(n)-orig(n);
 end
+
+SNRn = 0;
+SNRd = 0;
+
+for n = 1:length(orig)-1
+    SNRn = SNRn + orig(n)^2;
+end
+
+for n = 1:length(orig)-1
+    SNRd = SNRd + (xq(n) - orig(n))^2;
+end
+
+SNR = SNRn/SNRd;
+
+SNRdb = 10*log(SNR);
 
 %plot anf print
 subplot(5,1,1);
@@ -115,6 +100,13 @@ subplot(5,1,5);
 title("Quantized Error");
 plot(1:length(orig),eq)
 
-%fprintf("SNR dB: %f\n", SNRdb)
+fprintf("SNR dB: %f\n", SNRdb)
 
 audiowrite("G3_mp1_2.wav", xq, Fs)
+
+function i = SIGN(x)
+    i = sign(x);
+    if i == 0
+        i = 1;
+    end
+end
