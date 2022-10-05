@@ -64,12 +64,12 @@ SNRd = 0;
 
 % SNR formula numerator
 for n = 1:length(orig)-1
-    SNRn = SNRn + x(n)^2;
+    SNRn = SNRn + orig(n)^2;
 end
 
 % SNR formula denominator
 for n = 1:length(orig)-1
-    SNRd = SNRd + (xq(n) - x(n))^2;
+    SNRd = SNRd + (xq(n) - orig(n))^2;
 end
 
 SNR = SNRn/SNRd;
