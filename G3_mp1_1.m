@@ -51,14 +51,14 @@ for v = 1:length(orig)
         del2 = 7;
     end
 
-    % recovered volage
+    % recovered voltage
     xq(v) = del2*delta;
 
     % quantization error
     eq(v) = xq(v)-orig(v);
 end
 
-% Signl-to-Noise Power Ratio
+% Signal-to-Noise Power Ratio
 SNRn = 0;
 SNRd = 0;
 
@@ -76,7 +76,7 @@ SNR = SNRn/SNRd;
 
 SNRdb = 10*log10(SNR);
 
-%plot anf print
+%plot and print
 subplot(3,1,1);
 plot(1:length(orig),orig)
 title("Original Speech");
