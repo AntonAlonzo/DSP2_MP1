@@ -10,7 +10,7 @@ y = [];
 
 % mu-law Companding
 for n = 1:length(orig)
-    num = log(1 + 255*abs(orig(n))/abs(max(orig)));
+    num = log(1 + 255*abs(orig(n))/ogmax);
     y(n) = SIGN(orig(n)) * num/log(1+255);
 end
 
@@ -66,7 +66,7 @@ eq=[];
 
 % mu-law Expander
 for n = 1:length(yq)
-    xq(n) = abs(max(orig))*SIGN(yq(n))*((1+255)^abs(yq(n))-1)/255;
+    xq(n) = ogmax*SIGN(yq(n))*((1+255)^abs(yq(n))-1)/255;
     
     % quantization error
     eq(n) = xq(n)-orig(n);
