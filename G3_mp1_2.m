@@ -83,7 +83,7 @@ end
 
 % SNR formula denominator
 for n = 1:length(orig)
-    SNRd = SNRd + (xq(n) - orig(n))^2;
+    SNRd = SNRd + eq(n)^2;
 end
 
 SNR = SNRn/SNRd;
