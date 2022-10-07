@@ -7,31 +7,29 @@
 % 12 bit to 8 bit compressor algorithm in decimal
 comped = [];
 for i = 1:length(orig)
-   %record the sign of the current value of the original signal
-   if orig >= 0
-       sign = 1;
-   else
-       sign = -1;
-   end
 
-   if abs(orig(i)) >= 0 && abs(orig(i)) <= 31
+   mag = abs(orig(i));
+   s = sign(orig(i));
+
+   if mag >= 0 && mag <= 2/8 % segments 0 & 1
        comped(i) = orig(i);
-   elseif abs(orig(i)) >= 32 && abs(orig(i)) <= 47
-       comped(i) = floor(orig(i)/2)*2*sign;
-   elseif abs(orig(i)) >= 48 && abs(orig(i)) <= 63
-       comped(i) = floor(orig(i)/4)*4*sign;
-   elseif abs(orig(i)) >= 64 && abs(orig(i)) <= 79
-       comped(i) = floor(orig(i)/8)*8*sign;
-   elseif abs(orig(i)) >= 80 && abs(orig(i)) <= 95
-       comped(i) = floor(orig(i)/16)*16*sign;
-   elseif abs(orig(i)) >= 96 && abs(orig(i)) <= 111
-       comped(i) = floor(orig(i)/32)*32*sign;
-   elseif abs(orig(i)) >= 112 && abs(orig(i)) <= 127
-       comped(i) = floor(orig(i)/64)*32*sign;
+   elseif mag > 2/8 && mag <= 3/8 % segment 2
+       comped(i) = floor(mag/2)*s; % 2:1 compression
+   elseif mag > 3/8  && mag <= 4/8 % segment 3
+       comped(i) = floor(mag/4)*s; % 4:1 compression
+   elseif mag > 4/8 && mag <= 5/8 % segment 4
+       comped(i) = floor(mag/8)*s; % 8:1 compression
+   elseif mag > 5/8 && mag <= 6/8 % segment 5
+       comped(i) = floor(mag/16)*s; % 16:1 compression
+   elseif mag > 6/8 && mag <= 7/8 % segment 6
+       comped(i) = floor(mag/32)*s; % 32:1 compression
+   elseif mag > 7/8 && mag <= 1 % segment 7
+       comped(i) = floor(mag/64)*s; % 64:1 compression
    end
 end
 
 % 8-bit to 12-bit expander algorithm in decimal
+
 subplot(3,1,1)
 title('Original Speech')
 plot(1:length(orig), orig);
