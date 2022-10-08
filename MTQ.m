@@ -1,12 +1,11 @@
 % Function that references the midtread quantization level table
 % ALONZO & SOLIS | CEDISP2 S11
 
-function [quantized, error] = MTQ(original, delta)
+function [quantized] = MTQ(original, delta)
 
     % intialization
     x = [];
     quantized = [];
-    error = [];
     
     for v = 1:length(original)
     
@@ -48,9 +47,6 @@ function [quantized, error] = MTQ(original, delta)
     
         % recovered voltage
         quantized(v) = qlvl*delta;
-    
-        % quantization error
-        error(v) = quantized(v)-original(v);
     end
 
 end
