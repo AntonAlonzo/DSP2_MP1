@@ -8,8 +8,9 @@ ogmax = round(max(orig));
 comped = [];
 % mu-law Companding
 for n = 1:length(orig)
-    num = log(1 + 255*abs(orig(n)*128)/ogmax);
+    num = log(1 + 255*abs(orig(n))/ogmax);
     comped(n) = SIGN(orig(n)) * num/log(1+255);
+    comped(n) = (comped(n)/128)
 end
 
 exped = [];
@@ -18,8 +19,7 @@ eq=[];
 % mu-law Expander
 for n = 1:length(comped)
     
-    exped(n) = ogmax*SIGN(comped(n))*((1+255)^abs(comped(n))-1)/255;
-    exped(n) = exped(n)/128;
+    exped(n) = ogmax*SIGN(comped(n))*((1+255)^abs(comped(n)*128)-1)/255;
     
     % quantization error
     eq(n) = exped(n)-orig(n);
