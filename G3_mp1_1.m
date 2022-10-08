@@ -10,7 +10,10 @@ ogmin = round(min(orig));
 delta = (ogmax-ogmin)/(2^4-1);
 
 % Calling the user-made midtread quantization function
-[xq, eq] = MTQ(orig, delta);
+xq = MTQ(orig, delta);
+
+% Quantization error
+eq = xq' - orig;
 
 % Calling the user-made Signal-to-Noise Power Ratio function
 SNRdb = SNR(orig, xq);
