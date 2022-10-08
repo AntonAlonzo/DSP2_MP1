@@ -8,7 +8,7 @@ ogmax = round(max(orig));
 comped = [];
 % mu-law Companding
 for n = 1:length(orig)
-    num = log(1 + 255*abs(orig(n)*128)/ogmax);
+    num = log(1 + 255*abs(floor(orig(n)*128))/ogmax);
     comped(n) = SIGN(orig(n)) * num/log(1+255);
 end
 
@@ -43,17 +43,25 @@ SNR = SNRn/SNRd;
 
 SNRdb = 10*log10(SNR);
 
-subplot(3,1,1)
+subplot(4,1,1)
 title('Original Speech')
 plot(1:length(orig), orig);
 
-subplot(3,1,2)
+subplot(4,1,2)
 title('Compressed Signal')
 plot(1:length(orig), comped);
 
-subplot(3,1,3)
+subplot(4,1,3)
 title('Expanded Signal')
 plot(1:length(orig), exped);
+
+subplot(4,1,4)
+title('Quantization Error')
+plot(1:length(orig), eq);
+
+fprintf("SNR dB: %f\n", SNRdb)
+
+audiowrite("G3_mp1_3.wav", exped, Fs)
 
 function s = SIGN(n)
     if n < 0
