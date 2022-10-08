@@ -13,19 +13,16 @@ for n = 1:length(orig)
 end
 
 exped = [];
-eq=[];
 
 % mu-law Expander
 for n = 1:length(comped)
-    
     exped(n) = ogmax*SIGN(comped(n))*((1+255)^abs(comped(n))-1)/255;
-    
-    % quantization error
-    eq(n) = exped(n)-orig(n);
 end
 
-% Signl-to-Noise Power Ratio
+% quantization error
+eq = exped' - orig;
 
+% Signl-to-Noise Power Ratio
 SNRdb = SNR(orig, exped);
 
 subplot(4,1,1)

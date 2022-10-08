@@ -10,50 +10,40 @@ comped = [];
 for n = 1:length(orig)
     num = log(1 + 255*abs(orig(n))/ogmax);
     comped(n) = SIGN(orig(n)) * num/log(1+255);
-    comped(n) = (comped(n)/128)
 end
 
 exped = [];
-eq=[];
 
 % mu-law Expander
 for n = 1:length(comped)
-    
-    exped(n) = ogmax*SIGN(comped(n))*((1+255)^abs(comped(n)*128)-1)/255;
-    
-    % quantization error
-    eq(n) = exped(n)-orig(n);
+    exped(n) = ogmax*SIGN(comped(n))*((1+255)^abs(comped(n))-1)/255;
 end
+
+% quantization error
+eq = expe
 
 % Signl-to-Noise Power Ratio
-SNRn = 0;
-SNRd = 0;
+SNRdb = SNR(orig, exped);
 
-% SNR formula numerator
-for n = 1:length(orig)
-    SNRn = SNRn + orig(n)^2;
-end
-
-% SNR formula denominator
-for n = 1:length(orig)
-    SNRd = SNRd + eq(n)^2;
-end
-
-SNR = SNRn/SNRd;
-
-SNRdb = 10*log10(SNR);
-
-subplot(3,1,1)
+subplot(4,1,1)
 title('Original Speech')
 plot(1:length(orig), orig);
 
-subplot(3,1,2)
+subplot(4,1,2)
 title('Compressed Signal')
 plot(1:length(orig), comped);
 
-subplot(3,1,3)
+subplot(4,1,3)
 title('Expanded Signal')
 plot(1:length(orig), exped);
+
+subplot(4,1,4)
+title('Quantization Error')
+plot(1:length(orig), eq);
+
+fprintf("\nSNR dB: %f\n\n", SNRdb)
+
+audiowrite("G3_mp1_3.wav", exped, Fs)
 
 function s = SIGN(n)
     if n < 0
