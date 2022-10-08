@@ -36,7 +36,7 @@ for i = 1:length(comped)
    s = sign(comped(i));
 
    if mag >= 0 && mag <= 2/8 % segments 0 & 1
-       exped(i) = orig(i);
+       exped(i) = comped(i);
    elseif mag > 2/8 && mag <= 3/8 % segment 2
        exped(i) = mag*2*s; % 2:1 compression
    elseif mag > 3/8  && mag <= 4/8 % segment 3
