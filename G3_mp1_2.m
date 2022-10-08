@@ -17,7 +17,7 @@ end
 delta = (ogmax-ogmin)/(2^4-1);
 
 % Employing the user-made linear 4-bit mitread quantizer function
-yq = MTQ(orig);
+yq = MTQ(orig, delta);
 
 xq = [];
 % mu-law Expander
