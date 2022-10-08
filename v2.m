@@ -8,7 +8,7 @@ ogmax = round(max(orig));
 comped = [];
 % mu-law Companding
 for n = 1:length(orig)
-    num = log(1 + 255*abs(floor(orig(n)*128))/ogmax);
+    num = log(1 + 255*abs(orig(n))/ogmax);
     comped(n) = SIGN(orig(n)) * num/log(1+255);
 end
 
@@ -19,29 +19,14 @@ eq=[];
 for n = 1:length(comped)
     
     exped(n) = ogmax*SIGN(comped(n))*((1+255)^abs(comped(n))-1)/255;
-    exped(n) = exped(n)/128;
     
     % quantization error
     eq(n) = exped(n)-orig(n);
 end
 
 % Signl-to-Noise Power Ratio
-SNRn = 0;
-SNRd = 0;
 
-% SNR formula numerator
-for n = 1:length(orig)
-    SNRn = SNRn + orig(n)^2;
-end
-
-% SNR formula denominator
-for n = 1:length(orig)
-    SNRd = SNRd + eq(n)^2;
-end
-
-SNR = SNRn/SNRd;
-
-SNRdb = 10*log10(SNR);
+SNRdb = SNR(orig, exped);
 
 subplot(4,1,1)
 title('Original Speech')
@@ -59,7 +44,7 @@ subplot(4,1,4)
 title('Quantization Error')
 plot(1:length(orig), eq);
 
-fprintf("SNR dB: %f\n", SNRdb)
+fprintf("\nSNR dB: %f\n\n", SNRdb)
 
 audiowrite("G3_mp1_3.wav", exped, Fs)
 
