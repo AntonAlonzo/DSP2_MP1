@@ -9,7 +9,7 @@ ogmin = round(min(orig));
 y = [];
 % mu-law Companding
 for n = 1:length(orig)
-    num = log(1 + 255*abs(orig(n))/ogmax);
+    num = log(1 + 255*abs(orig(n))/ogmax); % numerator
     y(n) = SIGN(orig(n)) * num/log(1+255);
 end
 
@@ -26,7 +26,7 @@ for n = 1:length(yq)
 end
 
 % quantization error
-eq = xq - orig;
+eq = xq' - orig;
 
 % Employing the user-made Signl-to-Noise Power Ratio function
 SNRdb = SNR(orig, xq);
@@ -57,6 +57,7 @@ fprintf("\nSNR dB: %f\n\n", SNRdb)
 % Generate new audio file from quantized waveform
 audiowrite("G3_mp1_2.wav", xq, Fs)
 
+% Modified sign function
 function i = SIGN(x)
     i = sign(x);
     if i == 0
