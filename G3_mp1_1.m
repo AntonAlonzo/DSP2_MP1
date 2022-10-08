@@ -1,4 +1,5 @@
-% Script that simulates the operation of a 4-bit linear midtread quantizer on a given speech signal
+% Script that simulates the operation of a 4-bit linear midtread quantizer 
+% on a given speech signal
 % ALONZO & SOLIS | CEDISP2 S11 | PROBLEM 1
 
 % obtain normalized data and bounds

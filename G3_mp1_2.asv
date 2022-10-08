@@ -1,52 +1,40 @@
-% Script that simulates the operation of analog μ-Law companding that employs the linear or uniform 4-bit midtread quantizer that was used in Problem 1
+% Script that simulates the operation of analog μ-Law companding that 
+% employs the linear or uniform 4-bit midtread quantizer that was 
+% used in Problem 1
 % ALONZO & SOLIS | CEDISP2 S11 | PROBLEM 2
 
 % Obtain normalized data and bounds
 [orig, Fs] = audioread("gutom.wav");
 ogmax = round(max(orig));
 ogmin = round(min(orig));
+mu = 255;
 
 y = [];
 % mu-law Companding
 for n = 1:length(orig)
-    num = log(1 + 255*abs(orig(n))/ogmax);
-    y(n) = SIGN(orig(n)) * num/log(1+255);
+    num = log(1 + mu*abs(orig(n))/ogmax); % numerator
+    y(n) = SIGN(orig(n)) * num/log(1+mu);
 end
 
 % Calculating the step size
 delta = (ogmax-ogmin)/(2^4-1);
 
 % Employing the user-made linear 4-bit mitread quantizer function
-yq = MTQ(orig);
+yq = MTQ(orig, delta);
 
 xq = [];
 % mu-law Expander
 for n = 1:length(yq)
-    xq(n) = ogmax*SIGN(yq(n))*((1+255)^abs(yq(n))-1)/255;
+    xq(n) = ogmax*SIGN(yq(n))*((1+mu)^abs(yq(n))-1)/mu;
 end
 
 % quantization error
-eq = xq - orig;
+eq = xq' - orig;
 
-% Signl-to-Noise Power Ratio
-SNRn = 0;
-SNRd = 0;
+% Employing the user-made Signl-to-Noise Power Ratio function
+SNRdb = SNR(orig, xq);
 
-% SNR formula numerator
-for n = 1:length(orig)
-    SNRn = SNRn + orig(n)^2;
-end
-
-% SNR formula denominator
-for n = 1:length(orig)
-    SNRd = SNRd + eq(n)^2;
-end
-
-SNR = SNRn/SNRd;
-
-SNRdb = 10*log10(SNR);
-
-%plot anf print
+% Plot the waveforms and display the final answer
 subplot(5,1,1);
 plot(1:length(orig),orig)
 title("Original Speech");
@@ -67,13 +55,7 @@ subplot(5,1,5);
 plot(1:length(orig),eq)
 title("Quantized Error");
 
-fprintf("SNR dB: %f\n", SNRdb)
+fprintf("\nSNR dB: %f\n\n", SNRdb)
 
+% Generate new audio file from quantized waveform
 audiowrite("G3_mp1_2.wav", xq, Fs)
-
-function i = SIGN(x)
-    i = sign(x);
-    if i == 0
-        i = 1;
-    end
-end

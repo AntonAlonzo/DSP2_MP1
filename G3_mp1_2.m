@@ -1,16 +1,19 @@
-% Script that simulates the operation of analog μ-Law companding that employs the linear or uniform 4-bit midtread quantizer that was used in Problem 1
+% Script that simulates the operation of analog μ-Law companding that 
+% employs the linear or uniform 4-bit midtread quantizer that was 
+% used in Problem 1
 % ALONZO & SOLIS | CEDISP2 S11 | PROBLEM 2
 
 % Obtain normalized data and bounds
 [orig, Fs] = audioread("gutom.wav");
 ogmax = round(max(orig));
 ogmin = round(min(orig));
+mu = 255;
 
 y = [];
 % mu-law Companding
 for n = 1:length(orig)
-    num = log(1 + 255*abs(orig(n))/ogmax); % numerator
-    y(n) = SIGN(orig(n)) * num/log(1+255);
+    num = log(1 + mu*abs(orig(n))/ogmax); % numerator
+    y(n) = SIGN(orig(n)) * num/log(1+mu);
 end
 
 % Calculating the step size
@@ -22,7 +25,7 @@ yq = MTQ(orig, delta);
 xq = [];
 % mu-law Expander
 for n = 1:length(yq)
-    xq(n) = ogmax*SIGN(yq(n))*((1+255)^abs(yq(n))-1)/255;
+    xq(n) = ogmax*SIGN(yq(n))*((1+mu)^abs(yq(n))-1)/mu;
 end
 
 % quantization error
@@ -56,11 +59,3 @@ fprintf("\nSNR dB: %f\n\n", SNRdb)
 
 % Generate new audio file from quantized waveform
 audiowrite("G3_mp1_2.wav", xq, Fs)
-
-% Modified sign function
-function i = SIGN(x)
-    i = sign(x);
-    if i == 0
-        i = 1;
-    end
-end
