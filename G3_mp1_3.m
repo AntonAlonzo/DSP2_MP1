@@ -55,10 +55,3 @@ title('Quantization Error');
 fprintf("\nSNR dB: %f\n\n", SNRdb)
 
 audiowrite("G3_mp1_3.wav", exped, Fs)
-
-function s = SIGN(n)
-    s = sign(n);
-    if s == 0
-        s = 1;
-    end
-end
