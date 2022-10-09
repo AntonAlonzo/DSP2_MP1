@@ -2,6 +2,8 @@
 % on a given speech signal
 % ALONZO & SOLIS | CEDISP2 S11 | PROBLEM 1
 
+clear;clc;
+
 % obtain normalized data and bounds
 [orig, Fs] = audioread("gutom.wav");
 ogmax = round(max(orig));

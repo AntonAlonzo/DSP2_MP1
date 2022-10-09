@@ -3,6 +3,8 @@
 % used in Problem 1
 % ALONZO & SOLIS | CEDISP2 S11 | PROBLEM 2
 
+clear;clc;
+
 % Obtain normalized data and bounds
 [orig, Fs] = audioread("gutom.wav");
 ogmax = round(max(orig));
